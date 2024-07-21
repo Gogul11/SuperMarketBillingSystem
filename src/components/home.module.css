@@ -1,0 +1,65 @@
+.main, .des{
+    display: flex;
+    flex-direction: column;
+    
+}
+.content, .img{
+    display: flex;
+    flex-direction: row;
+}
+.content{
+    gap: 200px;
+    justify-content: space-around;
+}
+.main{
+    justify-content: center;
+    gap: 100px;
+    align-items: center; 
+    background-color: #FF735C;
+    height:100vh;
+}
+.des{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.img1{
+    height: 600px;
+    width: 600px;
+    border-radius:10px; 
+}
+
+.name{
+    font-size: 3.5rem;
+    color: #333333;
+    font-weight: 500;
+}
+.title{
+    background-color: #ffffff;
+    width: 600px;
+    text-align: center;
+    border-radius: 20px;
+}
+.moto{
+    font-size: 2.5rem;
+    color: #ffffff;
+    font-weight: 900;
+}
+.link{
+    height: 150px;
+    width: 150px;
+    background-color: #757575;
+    border: 1px solid #333333;
+    border-radius: 20px;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    line-height: 150px;
+}
+.link:hover{
+    background-color: #333333;
+    cursor: pointer;
+}

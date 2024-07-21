@@ -1,0 +1,91 @@
+.bill{
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.div1, .div2{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.addItem{
+    height: 750px;
+    width: 500px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+}
+.p{
+    font-size: 3rem;
+    font-weight: 800;
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 900px;
+    text-align: center;
+}
+.button, .link1{
+    width: 150px;
+    height: 50px;
+    background-color: #757575;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    color: #ffffff;
+}
+.button:hover, .link1:hover{
+    background-color: #333333;
+    cursor: pointer;
+}
+td{
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.table{
+    border-collapse:collapse;
+    width: 80%;
+    text-align: center;
+}
+.table, .table td, .table th{
+    border: 2px solid #333333;
+}
+.table td, .table th{
+    height: 50px;
+}
+.items{
+    width: 1200px;
+    height: 750px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.tc{
+    height: 600px;
+    overflow: auto;
+    padding: 50px 0px 50px 160px;
+    background-color:#d9d9d9;
+    width: 80%;
+    border-radius: 20px;
+}
+.amt{
+    font-size: 2rem;
+}
+.addItem input[type=number]{
+    width: 150px;
+    height: 30px;
+}
+.link1{
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    line-height: 50px;
+}

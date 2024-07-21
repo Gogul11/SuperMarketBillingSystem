@@ -1,0 +1,100 @@
+.button{
+    height: 100px;
+    width: 300px;
+    background-color: #757575;
+    border: 1px solid #333333;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 1.3rem;
+}
+.button:hover, .button1:hover{
+    background-color: #333333;
+    cursor: pointer;
+}
+.options, .buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.options{
+    margin: 50px 0px 0px 0px;
+}
+
+.buttons{
+    height: 700px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+}
+
+.link4{
+    width: 150px;
+    height: 50px;
+    background-color: #757575;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    color: #ffffff;
+    margin: 0px 0px 0px 20px;
+    display: block;
+    text-decoration: none;
+    line-height: 50px;
+    text-align: center;
+}
+
+.admin{
+    display: flex;
+    flex-direction: row;
+    gap: 200px;
+    justify-content: center;
+    align-items: center;
+}
+
+.details{
+    height: 700px;
+    width: 900px;
+    background-color: #ffffff;
+    margin: 150px 0px 0px 0px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.l1{
+    font-size: 3rem;
+    font-weight: 700;
+}
+.l2 ul li:nth-child(1){
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+ul{
+    list-style: none;
+}
+.info{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+.l2 ul li{
+    font-size: 2rem;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.form input{
+    width: 250px;
+    height: 40px;
+    padding-left: 20px;
+}
+
+.note{
+    color: #FF735C;
+}
+.links{
+    display: flex;
+}
