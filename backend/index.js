@@ -1,12 +1,16 @@
 const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
+const dotenv = require('dotenv')
 
-const {PORT, mongourl} = require("./config.js")
 const {ProductModel} = require("./model.js")
 
 const bill = require("./routers/bill.js")
 const admin = require("./routers/admin.js")
+
+dotenv.config()
+const port = process.env.PORT
+const mongourl = process.env.MONGO_URL
 
 const app = express()
 
@@ -23,7 +27,7 @@ app.get("/", (req, res) => {
 
 mongoose.connect(mongourl)
 .then(() => {
-    app.listen(PORT, () => console.log("successfull"))
+    app.listen(port, () => console.log("successfull"))
 })
 .catch((err) => {
     console.log(err.message)
