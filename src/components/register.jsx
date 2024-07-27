@@ -10,7 +10,9 @@ export default function Register(){
     const[password, setPassword] = useState(" ")
     const[auth, setAuth] = useState(false)
     useEffect(() => {
-        axios.get("http://localhost:5000/admin/register")
+        axios.get("http://localhost:5000/admin/register", {headers: {
+            Authorization: `Bearer ${localStorage.getItem('session')}`
+        }})
         .then(res => setAuth(res.data.success))
         .catch(err => window.alert(err.message))
     })
@@ -19,7 +21,9 @@ export default function Register(){
         axios.post("http://localhost:5000/admin/register", {
             username : name,
             password : password
-        })
+        },{headers: {
+            Authorization: `Bearer ${localStorage.getItem('session')}`
+        }})
         .then((res) => {
             if(res.data.success){
                 window.alert(`User ${name} registered successfully`)

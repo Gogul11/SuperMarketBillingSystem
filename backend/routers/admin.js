@@ -1,6 +1,8 @@
 const express = require("express")
 const bcrypt = require("bcrypt")
 const bodyParser = require("body-parser")
+const jwt = require("jsonwebtoken")
+require('dotenv').config()
 
 const {ProductModel, UserModel} = require("../model.js")
 
@@ -8,36 +10,57 @@ const admin = express.Router()
 
 const url = bodyParser.urlencoded({extended : false})
 
-admin.get("/", async(req, res) => {
-        res.status(200).json({success : true})
+//Authentication for session token
+const authMiddleware = async(req, res, next) => {
+        const token = await req.header('Authorization')?.split(' ')[1];
+        if (!token) return res.status(401).json({ success: false, message: 'No token, authorization denied' });
+
+        try {
+                const decoded = jwt.verify(token, process.env.SECRET_KEY);
+                req.user = decoded;
+                next();
+        } catch (err) {
+        res.status(400).json({ success: false, message: 'Token is not valid' });
+        }
+};
+
+admin.get("/", authMiddleware, async(req, res) => {
+        const flag = await req.user
+        try {
+                if(flag) return res.status(200).json({success : true})
+        } catch (error) {
+                return res.status(404).json({success : false, message : error.message})
+        }
+
 })
 
-admin.get("/login", async (req, res) => {
-        const userinfo = await UserModel.find({}, {username:true,password:true, _id:false})
-        console.log(userinfo)
-        const user = userinfo.find(user => user.username === req.body.username)
-        if(user == null){
+admin.post("/login", async (req, res) => {
+        const userinfo = await UserModel.findOne({username : req.body.username})
+        if(userinfo == null){
                 return res.status(200).json({success:false, message : "could not find user"})
         }
+        const oneuser = await bcrypt.compare(req.body.password, userinfo.password)
+        if(!oneuser){
+                return res.status(500).json({success : false, message : "Password is worng"})
+        }
         try{
-                const oneuser = await bcrypt.compare(req.body.password, user.password)
-                if(oneuser){
-                        return res.status(201).json({success:true, data: oneuser})
-                }
-                else{
-                        return res.status(404).json({success:false})
-                }
+                const token = jwt.sign({id:userinfo._id}, process.env.SECRET_KEY)
+                if(!token) res.status(404).json({success:false})
+                return res.status(201).json({success:true, authenticate:token})
         } catch (error) {
                 return res.status(404).json({success : false, message : error.message})
         }
 })
 
-admin.get("/register", (req, res) => {
+admin.get("/register",authMiddleware, (req, res) => {
+        
+        if(!req.user) return res.status(500).json({success:false, message:"Something went wrong"})
         res.status(200).json({success : true})
 })
 
-admin.post("/register", async(req, res) => {
+admin.post("/register",authMiddleware, async(req, res) => {
 
+        if(!req.user) return res.status(500).json({success:false, message:"Something went wrong"})
         const salt = await bcrypt.genSalt(10)
         const newPassword = await bcrypt.hash(req.body.password, salt)
 
@@ -56,7 +79,8 @@ admin.post("/register", async(req, res) => {
 })
 
 
-admin.post("/add", url,async (req, res) => {
+admin.post("/add", url,authMiddleware,async (req, res) => {
+        if(!req.user) return res.status(500).json({success:false, message:"Something went wrong"})
         try {
                 const newProduct = await ProductModel(req.body)
                 newProduct.save()
@@ -66,10 +90,10 @@ admin.post("/add", url,async (req, res) => {
         }
 })
 
-admin.put("/update/:Id", async (req, res) => {
+admin.put("/update/:Id",authMiddleware, async (req, res) => {
 
         const updates = req.body
-
+        if(!req.user) return res.status(500).json({success:false, message:"Something went wrong"})
         try {
                 const updatedProduct = await ProductModel.findOneAndUpdate({p_id : parseInt(req.params.Id)},  { $set: updates }, {new: true})
 
@@ -84,7 +108,8 @@ admin.put("/update/:Id", async (req, res) => {
         }        
 })
 
-admin.delete("/delete/:id", async (req, res) => {
+admin.delete("/delete/:id",authMiddleware, async (req, res) => {
+        if(!req.user) return res.status(500).json({success:false, message:"Something went wrong"})
         try {
                 const deleteProduct = await ProductModel.findOneAndDelete({p_id : req.params.id})
                 if(deleteProduct){

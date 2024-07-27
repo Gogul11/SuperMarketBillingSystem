@@ -17,3 +17,10 @@ body{
     line-height: normal;
     display: grid; place-items: center; height: 200px;
 }
+
+.loadingComp{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

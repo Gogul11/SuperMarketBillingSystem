@@ -39,7 +39,9 @@ const AddComp = () => {
             name : name,
             price : price,
             discount : discount
-        })
+        },{headers: {
+            Authorization: `Bearer ${localStorage.getItem('session')}`
+        }})
         .then((res) => {
             if(res.data.success){
                 setName("")
@@ -98,13 +100,17 @@ const UpdateComp = () => {
     
     const[id, setId] = useState(0)
     const[Value, setValue] = useState("name")
-    const[updateValue, setUpdateValue] = useState(null)
+    const[updateValue, setUpdateValue] = useState("")
+
+    
     
     const handleUpdateProduct = (e) => {
         e.preventDefault()
         axios.put(`http://localhost:5000/admin/update/${parseInt(id)}`,{
             [Value] : updateValue
-        })
+        },{headers: {
+            Authorization: `Bearer ${localStorage.getItem('session')}`
+        }})
         .then((res) => {
             if(res.data.success){
                 window.alert(`Product ID ${id} is Successfully Updated`)
@@ -134,7 +140,7 @@ const UpdateComp = () => {
                     id="option"
                     value={Value}
                     onChange={e => setValue(e.target.value)}> 
-                    <option value="name" selected>Product Name</option>
+                    <option value="name">Product Name</option>
                     <option value="price">Product Price</option>
                     <option value="discount">Product Discount</option>
                 </select>
@@ -163,7 +169,9 @@ const DelComp = () => {
 
     const handleDeleteProduct = (e) => {
         e.preventDefault()
-        axios.delete(`http://localhost:5000/admin/delete/${d_id}`)
+        axios.delete(`http://localhost:5000/admin/delete/${d_id}`, {headers: {
+            Authorization: `Bearer ${localStorage.getItem('session')}`
+        }})
         .then((res) => {
             if(res.data.success){
                 window.alert(`Product ${d_id} Successfully Deleted...`)
@@ -195,11 +203,25 @@ export default function Admin(){
     const[cont, setcont] = useState(0)
     const[auth, setAuth] = useState(false)
 
+    const session = localStorage.getItem('session')
     useEffect(() => {
-        axios.get("http://localhost:5000/admin")
-        .then(res => setAuth(res.data.success))
-        .catch(err => console.log(err.message))
-    },[])
+
+                try {
+                    if(session){
+                            axios.get("http://localhost:5000/admin",{headers: {
+                            Authorization: `Bearer ${session}`
+                        }})
+                        .then(res => setAuth(res.data.success))
+                        .catch(err => window.alert(err.message))
+                    }
+                } catch (error) {
+                    console.log(error.message)
+                }
+    }, [])
+
+    const handleLogout = () => {
+        localStorage.removeItem('session')
+    }
 
     let ComponentToRender;
 
@@ -217,34 +239,28 @@ export default function Admin(){
         ComponentToRender = DefaultComp;
         break;
     }
-
-    return(
-        <>
-        {auth ? 
-        <div className={styles.admin}>
         
-            <div className={styles.options}>
-                <div className={styles.links}>
-                    <Link to="/"  className={styles.link4}>Back</Link>
-                    <Link to="/admin/login" className={styles.link4} >Login</Link>
-                    <Link to="/admin/register" className={styles.link4} >New Register</Link>
+
+        return(
+            <div className={styles.admin}>
+            
+                <div className={styles.options}>
+                    <div className={styles.links}>
+                        <Link to="/" className={styles.link4} onClick={handleLogout} >Logout</Link>
+                        <Link to="/admin/register" className={styles.link4} >New Register</Link>
+                    </div>
+
+                    <div className={styles.buttons}>
+                        <button className={styles.button} onClick={() => setcont(0)}>View</button>
+                        <button className={styles.button} onClick={() => setcont(1)}>Add Item</button>
+                        <button className={styles.button} onClick={() => setcont(2)}>Update Item</button>
+                        <button className={styles.button} onClick={() => setcont(3)}>Delete Item</button>
+                    </div>
                 </div>
 
-                <div className={styles.buttons}>
-                    <button className={styles.button} onClick={() => setcont(0)}>View</button>
-                    <button className={styles.button} onClick={() => setcont(1)}>Add Item</button>
-                    <button className={styles.button} onClick={() => setcont(2)}>Update Item</button>
-                    <button className={styles.button} onClick={() => setcont(3)}>Delete Item</button>
+                <div className={styles.details}>
+                <ComponentToRender />
                 </div>
+
             </div>
-
-            <div className={styles.details}>
-            <ComponentToRender />
-            </div>
-
-        </div>
-        :<h1>404 error</h1>}
-        </>
-
-    )
-}
+)}

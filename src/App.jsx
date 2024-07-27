@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import axios from 'axios'
+import ReactLoading from 'react-loading'
 
 import Home from './components/home'
 import Login from './components/login'
@@ -16,13 +17,14 @@ function App() {
     axios.get("http://localhost:5000/").
     then(res => setauth(res.data.success))
     .catch(setauth(false))
-  }, [])
+  }, [auth])
 
   return(
     <div>
       {auth ? 
       <BrowserRouter>
           <Routes>
+            
               <Route 
                 path='/'
                 element={<Home/>}/>
@@ -49,9 +51,14 @@ function App() {
                   element={<Register/>}/>
           </Routes>
       </BrowserRouter>
-      : <>
-          <h1>404 error</h1>
-        </>}
+      : <div className="loadingComp">
+          <ReactLoading
+                type="spinningBubbles"
+                color="#D9D9D9"
+                height={200}
+                width={200}
+            />
+        </div>}
     </div>
   )
   

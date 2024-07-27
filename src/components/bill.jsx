@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./bill.module.css"
 import { Link } from "react-router-dom";
 import axios from "axios";
+import ReactLoading from "react-loading"
 
 export default function Bill(){
 
@@ -22,7 +23,7 @@ export default function Bill(){
                         setProduct(res.data.products)
                     })
         .catch(err => console.log(err))
-    }, [])
+    }, [auth])
     
     const findproduct = () => {
         const foundProduct = Product.find((ele) => ele.p_id === parseInt(id));
@@ -156,7 +157,14 @@ export default function Bill(){
                 </div>
             </div>
         </div>
-        :<h1>404 error</h1>}
+        :<div className="loadingComp">
+            <ReactLoading
+                type="spinningBubbles"
+                color="#D9D9D9"
+                height={200}
+                width={200}
+            />
+        </div>}
         </> 
     )
 }

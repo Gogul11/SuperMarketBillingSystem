@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./payment.module.css"
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import ReactLoading from 'react-loading'
 
 export default function Payment(){
 
@@ -18,7 +19,7 @@ export default function Payment(){
         axios.get("http://localhost:5000/bill/payment")
         .then(res => setAuth(res.data.success))
 
-    }, [])
+    }, [auth])
 
     const handlePay = (event) => {
         if(number.toString().length == 10){
@@ -36,7 +37,7 @@ export default function Payment(){
     }
 
     const send = () => {
-        window.alert("hi there")
+        window.alert("Order Confirmed")
     }
 
     return(
@@ -89,7 +90,14 @@ export default function Payment(){
             </div>
         </div>
     
-    :<h1>404 error</h1>}
+    :<div className="loadingComp">
+        <ReactLoading
+            type="spinningBubbles"
+            color="#D9D9D9"
+            height={200}
+            width={200}
+        />
+    </div>}
 
         </>
 
