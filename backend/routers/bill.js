@@ -13,6 +13,7 @@ bill.get("/", async (req, res) => {
                                             p_id : true, 
                                             price:true,
                                             discount:true,
+                                            method : true,
                                             name: true})
         if(data){
             return res.status(200).json({success:true, products : data})
@@ -38,7 +39,8 @@ bill.post("/:num/:amt", async (req, res) => {
         const bill = await BillModel({
                                     mobile : num,
                                     amt : amt,
-                                    bill : req.body.bill})
+                                    bill : req.body.bill,
+                                    method : req.body.method})
         
         bill.save()
 

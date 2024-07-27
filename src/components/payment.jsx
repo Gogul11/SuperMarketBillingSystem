@@ -13,7 +13,7 @@ export default function Payment(){
 
     const[auth, setAuth] = useState(false)
     const[number, setNumber] = useState(null)
-
+    const[paymentMethod, setPaymentMethod] = useState("cash")
     useEffect(() => {
 
         axios.get("http://localhost:5000/bill/payment")
@@ -25,7 +25,8 @@ export default function Payment(){
         if(number.toString().length == 10){
 
             axios.post(`http://localhost:5000/bill/${parseInt(number)}/${parseInt(amt)}`,{
-                bill: productlist
+                bill: productlist,
+                method : paymentMethod
             })
             .then(res => console.log(res.data.success))
             .catch(err => console.log(err.message))
@@ -73,18 +74,29 @@ export default function Payment(){
             <div className={styles.details}>
                 <div>
                     <div>   
-                    <label htmlFor="detail">Enter Mobile number </label><br />
-                    <input 
-                        type="number" value={number}
-                        name="number"  
-                        className={styles.input} 
-                        placeholder="Mobile number"
-                        onChange={e => setNumber(e.target.value)}/><br />
+                        <label htmlFor="detail">Enter Mobile number </label><br />
+                        <input 
+                            type="number" value={number}
+                            name="number"  
+                            className={styles.input} 
+                            placeholder="Mobile number"
+                            onChange={e => setNumber(e.target.value)}/><br />
+                    </div>
+                
+                    <div>
+                            <label htmlFor="paymentMethod">Choose Payment Method : </label>
+                            <select id="paymentMethod"
+                                value={paymentMethod}
+                                onChange={e => setPaymentMethod(e.target.value)}>
+                                <option value="cash">Cash</option>
+                                <option value="card">Card</option>
+                                <option value="onlinepayment">Online Payment</option>
+                            </select>
                     </div>
 
                     <div>
-                    <button className={styles.button} onClick={send} type="button">Send Bill</button>
-                    <p className={styles.finalpay}>TOTAL AMOUNT : {amt}</p>
+                        <button className={styles.button} onClick={send} type="button">Send Bill</button>
+                        <p className={styles.finalpay}>TOTAL AMOUNT : {amt}</p>
                     </div>
                 </div>
             </div>

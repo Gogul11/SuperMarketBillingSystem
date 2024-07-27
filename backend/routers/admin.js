@@ -4,7 +4,7 @@ const bodyParser = require("body-parser")
 const jwt = require("jsonwebtoken")
 require('dotenv').config()
 
-const {ProductModel, UserModel} = require("../model.js")
+const {ProductModel, UserModel, BillModel} = require("../model.js")
 
 const admin = express.Router()
 
@@ -26,8 +26,12 @@ const authMiddleware = async(req, res, next) => {
 
 admin.get("/", authMiddleware, async(req, res) => {
         const flag = await req.user
+        const amts = await BillModel.find({}, {_id : false, amt : true, method: true})
+        const totamt = amts.reduce((def, amt) => def + amt.amt, 0)
+        const totProduct = await ProductModel.countDocuments({})
+        const list = [totamt, totProduct]
         try {
-                if(flag) return res.status(200).json({success : true})
+                if(flag) return res.status(200).json({success : true, value:list})
         } catch (error) {
                 return res.status(404).json({success : false, message : error.message})
         }

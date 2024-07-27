@@ -39,7 +39,8 @@ export default function Bill(){
         if(singleProduct.p_id){
             
             singleProduct.quantity = parseInt(quantity)
-            singleProduct.total = parseInt(singleProduct.price) * parseInt(quantity)
+            const finalPrice = parseInt(singleProduct.price) - (parseInt(singleProduct.price) * (parseInt(singleProduct.discount)/100))
+            singleProduct.total = finalPrice * parseInt(quantity)
             setProductList([...productlist,singleProduct])
             setSingleProduct({})
         }

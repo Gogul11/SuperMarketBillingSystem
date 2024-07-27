@@ -39,6 +39,10 @@ const BillSchema = new mongoose.Schema(
         bill : {
             type: Array,
             required : true
+        },
+        method : {
+            type : String,
+            required : true
         }
     },
     {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./admin.module.css"
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import ReactLoading from "react-loading"
 
 
 const DefaultComp = () => {
@@ -202,6 +202,7 @@ const DelComp = () => {
 export default function Admin(){
     const[cont, setcont] = useState(0)
     const[auth, setAuth] = useState(false)
+    const[item, setItem] = useState([])
 
     const session = localStorage.getItem('session')
     useEffect(() => {
@@ -211,7 +212,8 @@ export default function Admin(){
                             axios.get("http://localhost:5000/admin",{headers: {
                             Authorization: `Bearer ${session}`
                         }})
-                        .then(res => setAuth(res.data.success))
+                        .then((res) => {setAuth(res.data.success) 
+                                        setItem(res.data.value)})
                         .catch(err => window.alert(err.message))
                     }
                 } catch (error) {
@@ -235,13 +237,11 @@ export default function Admin(){
     case 3:
         ComponentToRender = DelComp;
         break;
-    default:
-        ComponentToRender = DefaultComp;
-        break;
     }
         
 
         return(
+            <>{auth ? 
             <div className={styles.admin}>
             
                 <div className={styles.options}>
@@ -259,8 +259,24 @@ export default function Admin(){
                 </div>
 
                 <div className={styles.details}>
-                <ComponentToRender />
+                    {cont == 0?
+                        <ul className={styles.info}>
+                            <li className={styles.l1}>Total Turnover : {item[0]} </li>
+                            <li className={styles.l1}>No of Products : {item[1]} </li>
+                        </ul>
+                    :<ComponentToRender/>}
                 </div>
 
             </div>
+            :
+            <div className="loadingComp">
+                <ReactLoading
+                    type="spinningBubbles"
+                    color="#D9D9D9"
+                    height={200}
+                    width={200}
+                />
+            </div>
+            }</>
+
 )}
