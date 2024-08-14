@@ -5,25 +5,6 @@ import axios from "axios";
 import ReactLoading from "react-loading"
 
 
-const DefaultComp = () => {
-
-    
-    return(
-        
-        <ul className={styles.info}>
-            <li className={styles.l1}>Total Turnover : </li>
-            <li className={styles.l2}>
-                <ul>
-                    <li>Cash Obtained,</li>
-                    <li>Cash : </li>
-                    <li>Card : </li>
-                    <li>Online payment : </li>
-                </ul>
-            </li>
-        </ul>
-    )
-}
-
 const AddComp = () => {
 
     const[name, setName] = useState("")
@@ -206,21 +187,33 @@ export default function Admin(){
 
     const session = localStorage.getItem('session')
     useEffect(() => {
-
-                try {
-                    if(session){
-                            axios.get("http://localhost:5000/admin",{headers: {
+        const fetchData = async () => {
+            try {
+                if (session) {
+                    const response = await axios.get("http://localhost:5000/admin", {
+                        headers: {
                             Authorization: `Bearer ${session}`
-                        }})
-                        .then((res) => {setAuth(res.data.success) 
-                                        setItem(res.data.value)})
-                        .catch(err => window.alert(err.message))
+                        }
+                    });
+    
+                    if (response.data.success) {
+                        setAuth(true);
+                        setItem(response.data.value);
+                        console.log('Authenticated:', response.data.success);
+                    } else {
+                        setAuth(false);
+                        window.alert('Authentication failed.');
                     }
-                } catch (error) {
-                    console.log(error.message)
                 }
-    }, [])
-
+            } catch (error) {
+                window.alert(`Error: ${error.message}`);
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
+    }, []); // Empty dependency array to ensure it runs only once on component mount
+    
     const handleLogout = () => {
         localStorage.removeItem('session')
     }

@@ -1,30 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {user} from "../img"
 import styles from "./login.module.css"
 import { Link } from "react-router-dom";
 import axios from "axios";
+import ReactLoading from "react-loading"
+
 
 export default function Login(){
 
     const[name, setName] = useState("")
     const[password, setPassword] = useState("")
+    const[auth, setAuth] = useState(false)
     
-
-    const setToken = (token) => {
-        localStorage.setItem('session', token)
-    }
-
     const handleLogin = async() => {
         await axios.post("http://localhost:5000/admin/login", {
             username: name,
             password: password
         })
         .then(res => {
-                if(res.data.success) setToken(res.data.authenticate)
+                if(res.data.success) localStorage.setItem('session',res.data.authenticate)
                 if(!res.data.success) window.alert(res.data.message)})
+        .catch(err => window.alert(err.message))
     }
 
+    useEffect(() => {
+        axios.get("http://localhost:5000/admin/login")
+            .then((res) => {if(res.data.success) setAuth(true)})
+            
+    }, [])
+
     return(
+        <>
+        {auth?
         <div className={styles.login}>
             <img className={styles.logo} src={user} alt="user-img" />
 
@@ -58,5 +65,17 @@ export default function Login(){
 
             <Link to="/" className={styles.link3}>BACK</Link>
         </div>
+        :
+            <div className="loadingComp">
+                <ReactLoading
+                    type="spinningBubbles"
+                    color="#D9D9D9"
+                    height={200}
+                    width={200}
+                />
+            </div>
+        }
+        </>
+
     )
 }

@@ -31,11 +31,15 @@ admin.get("/", authMiddleware, async(req, res) => {
         const totProduct = await ProductModel.countDocuments({})
         const list = [totamt, totProduct]
         try {
-                if(flag) return res.status(200).json({success : true, value:list})
+                if(flag) return res.status(201).json({success : true, value:list})
         } catch (error) {
                 return res.status(404).json({success : false, message : error.message})
         }
 
+})
+
+admin.get("/login", (req, res) => {
+        res.status(200).json({success : true})
 })
 
 admin.post("/login", async (req, res) => {
