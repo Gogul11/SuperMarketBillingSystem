@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import {user} from "../img"
 import styles from "./login.module.css"
 import { Link } from "react-router-dom";
@@ -19,6 +19,7 @@ export default function Login(){
         })
         .then(res => {
                 if(res.data.success) localStorage.setItem('session',res.data.authenticate)
+                    console.log(res.data.success)
                 if(!res.data.success) window.alert(res.data.message)})
         .catch(err => window.alert(err.message))
     }
@@ -64,6 +65,7 @@ export default function Login(){
             </form>
 
             <Link to="/" className={styles.link3}>BACK</Link>
+        
         </div>
         :
             <div className="loadingComp">

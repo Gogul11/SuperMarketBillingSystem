@@ -215,7 +215,9 @@ export default function Admin(){
     }, []); // Empty dependency array to ensure it runs only once on component mount
     
     const handleLogout = () => {
-        localStorage.removeItem('session')
+        localStorage.removeItem('session');
+        setAuth(false);
+        console.log("logged out")
     }
 
     let ComponentToRender;
