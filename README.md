@@ -1,7 +1,7 @@
 # **Super Market Billing System**
 
 ## Overview
-  The Supermarket Billing System is a comprehensive web application designed to streamline and automate the billing process in a supermarket. Built using the MERN stack (MongoDB, Express.js, React.js, Node.js), this system enhances the customer experience, improves operational efficiency, and minimizes manual errors. The system manages inventory, processes sales transactions, and generates detailed sales reports.
+  The Supermarket Billing System project is a comprehensive web application designed to streamline and automate the billing process in a supermarket. Built using the MERN stack (MongoDB, Express.js, React.js, Node.js), this system enhances the customer experience, improves operational efficiency, and minimizes manual errors. The system manages inventory, processes sales transactions, and generates detailed sales reports.
 
 ## Features
 ### User Authentication
